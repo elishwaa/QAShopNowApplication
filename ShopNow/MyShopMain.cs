@@ -15,43 +15,43 @@ namespace ShopNow
     {
         public string neudesicwebsiteURL;
         public string myshopUrl;
-        public IWebDriver driver = new ChromeDriver();
-        CommonFunctions commonFunction = new CommonFunctions();
-        //MyShopHomePage myShopFunctions = new MyShopHomePage();
+        Common homePage = new Common();
+        ProductPage productPage;
+       
 
-        [Test]
-        public void TestCommonMethod()
+        [Test, Order(1)]
+        public void TestHomePageTitle()
         {
+            homePage.LoadExcelSheet();
+            myshopUrl = homePage.xRange.Cells[2][1].value;
+            homePage.LoadBrowser(myshopUrl);
+            homePage.TestHomePageByTitle();
+            System.Threading.Thread.Sleep(2000);
+            productPage = homePage.TestShopNowButtonClick();
 
-            commonFunction.LoadExcelSheet();
-            neudesicwebsiteURL = commonFunction.xRange.Cells[1][1].value;
-            commonFunction.LoadBrowser(neudesicwebsiteURL);
+            //shoppingCart.TestByPageTitle();
         }
 
-        [Test]
-        public void TestMyShop()
+        [Test, Order(2)]
+        public void TestProductPageTitle()
         {
-            commonFunction.LoadExcelSheet();
-            myshopUrl = commonFunction.xRange.Cells[2][1].value;
-            commonFunction.LoadBrowser(myshopUrl);
-
-            ExplicitWaitForElement(By.XPath("/html/body/div/div/div/div[2]/div[1]/div/div[1]/a"), 5);
-            IWebElement titleElement = driver.FindElement(By.XPath("/html/body/div/div/div/div[2]/div[1]/div/div[1]/a"));
-            string actualApptitle = titleElement.Text;
-            string requiredAppTitle = "MY SHOP";
-            Assert.AreEqual(requiredAppTitle, actualApptitle);
-            Console.WriteLine(actualApptitle);
+            productPage.TestByPageTitle();
         }
 
-        public IWebElement ExplicitWaitForElement(By locator, int seconds)
-        {
-            return new WebDriverWait(driver, TimeSpan.FromSeconds(seconds)).Until(ExpectedConditions.ElementExists(locator));
-        }
+        //[Test]
+        //public void TestShoppingCartNavigation()
+        //{
+           
 
-        public void ImplicitWaitForElement(IWebDriver driver)
-        {
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-        }
+        //}
+        //[Test]
+        //public void TestCommonMethod()
+        //{
+
+        //    homePage.LoadExcelSheet();
+        //    neudesicwebsiteURL = homePage.xRange.Cells[1][1].value;
+        //    homePage.LoadBrowser(neudesicwebsiteURL);
+        //}
 
     }
 }
